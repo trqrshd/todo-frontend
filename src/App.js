@@ -1,12 +1,16 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React from "react";
+import { Button } from "antd";
+
+import { Counter } from "./features/counter/Counter";
+import logo from "./logo.svg";
+
+import "./App.css";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Button type="primary">Button</Button>
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
         <p>
