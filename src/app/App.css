@@ -23,3 +23,9 @@
   margin-bottom: 20px;
   height: 250px !important;
 }
+.newly-added-todo {
+  transition: background-color 1s linear;
+}
+.animate-color {
+  background-color: lightgreen;
+}

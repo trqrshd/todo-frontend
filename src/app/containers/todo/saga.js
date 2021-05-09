@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { takeLatest, put, delay, select } from "redux-saga/effects";
+import { takeEvery, put, delay, select } from "redux-saga/effects";
 import axios from "axios";
 import {
   fetchTodoListRequest,
@@ -12,11 +12,15 @@ import {
   deleteTodoRequest,
   deleteTodoError,
   deleteTodoSuccess,
+  updateTodoRequest,
+  updateTodoSuccess,
+  updateTodoError,
+  setEditMode,
 } from "./slice";
 
 export function* fetchDataSaga() {
   try {
-    yield delay(500);
+    yield delay(1000);
     const response = yield axios.get("todos");
     yield put(
       fetchTodoListSuccess(
@@ -24,6 +28,7 @@ export function* fetchDataSaga() {
           .map((item) => ({
             ...item,
             editing: false,
+            editLoading: false,
             deleting: false,
           }))
           .sort((a, b) => b.id - a.id)
@@ -36,19 +41,36 @@ export function* fetchDataSaga() {
 
 function* createTodoSaga({ payload }) {
   try {
-    yield delay(500);
+    yield delay(1000);
     const response = yield axios.post("todos", payload);
     yield put(createTodoSuccess(response.data));
     yield put(setFormVisible(false));
+    document.getElementById("newly-added-todo").classList.add("animate-color");
+    yield delay(500);
+    document
+      .getElementById("newly-added-todo")
+      .classList.remove("animate-color");
     message.success(`Todo is created with title: "${response.data.title}"`);
   } catch (e) {
     yield put(createTodoError());
   }
 }
 
+function* updateTodoSaga({ payload }) {
+  try {
+    yield delay(1000);
+    const response = yield axios.put(`todos/${payload.id}`, payload);
+    yield put(updateTodoSuccess(response.data));
+    yield put(setEditMode({ id: response.data.id, editing: false }));
+    message.success(`Todo is updated with title: "${response.data.title}"`);
+  } catch (e) {
+    yield put(updateTodoError(payload));
+  }
+}
+
 function* deleteTodoSaga({ payload: { title, id } }) {
   try {
-    yield delay(500);
+    yield delay(1000);
     yield axios.delete(`todos/${id}`);
     yield put(deleteTodoSuccess(id));
     message.success(`Todo id deleted with title: "${title}"`);
@@ -58,7 +80,8 @@ function* deleteTodoSaga({ payload: { title, id } }) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(fetchTodoListRequest.type, fetchDataSaga);
-  yield takeLatest(createTodoRequest.type, createTodoSaga);
-  yield takeLatest(deleteTodoRequest.type, deleteTodoSaga);
+  yield takeEvery(fetchTodoListRequest.type, fetchDataSaga);
+  yield takeEvery(createTodoRequest.type, createTodoSaga);
+  yield takeEvery(updateTodoRequest.type, updateTodoSaga);
+  yield takeEvery(deleteTodoRequest.type, deleteTodoSaga);
 }

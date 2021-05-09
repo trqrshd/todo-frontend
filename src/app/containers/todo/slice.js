@@ -47,6 +47,32 @@ const todoSlice = createSlice({
       state.todoList.data[index].deleting = false;
     },
 
+    // Edit/update actions
+    setEditMode: (state, { payload: { id, editing } }) => {
+      const index = state.todoList.data.findIndex((item) => item.id === id);
+      state.todoList.data[index].editing = editing;
+    },
+    updateTodoRequest: (state, { payload: { id } }) => {
+      const index = state.todoList.data.findIndex((item) => item.id === id);
+      state.todoList.data[index].editLoading = true;
+    },
+    updateTodoSuccess: (state, { payload }) => {
+      const index = state.todoList.data.findIndex(
+        (item) => item.id === payload.id
+      );
+      state.todoList.data[index] = {
+        ...payload,
+        editLoading: false,
+        editing: false,
+      };
+    },
+    updateTodoError: (state, { payload }) => {
+      const index = state.todoList.data.findIndex(
+        (item) => item.id === payload.id
+      );
+      state.todoList.data[index].editLoading = false;
+    },
+
     // others
     setFormVisible: (state, { payload }) => {
       state.form.visible = payload;
@@ -66,6 +92,10 @@ export const {
   deleteTodoRequest,
   deleteTodoError,
   deleteTodoSuccess,
+  setEditMode,
+  updateTodoRequest,
+  updateTodoSuccess,
+  updateTodoError,
 } = todoSlice.actions;
 
 export default todoSlice;
