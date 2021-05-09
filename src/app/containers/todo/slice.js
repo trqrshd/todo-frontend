@@ -26,7 +26,7 @@ const todoSlice = createSlice({
     },
     createTodoSuccess: (state, { payload }) => {
       state.form.loading = false;
-      state.todoList.data.push(payload);
+      state.todoList.data.unshift(payload);
     },
     createTodoError: (state) => {
       state.form.loading = false;

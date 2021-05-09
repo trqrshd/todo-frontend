@@ -19,11 +19,13 @@ export function* fetchDataSaga() {
     const response = yield axios.get("todos");
     yield put(
       fetchTodoListSuccess(
-        response.data.map((item) => ({
-          ...item,
-          editing: false,
-          deleting: false,
-        }))
+        response.data
+          .map((item) => ({
+            ...item,
+            editing: false,
+            deleting: false,
+          }))
+          .sort((a, b) => b.id - a.id)
       )
     );
   } catch (e) {

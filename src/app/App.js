@@ -32,6 +32,29 @@ function App() {
   return (
     <div style={{ margin: 50 }}>
       <Row gutter={20}>
+        {!isCreateFormVisible ? (
+          <Col span={6}>
+            <Card style={{ textAlign: "center" }} className="cursor-pointer">
+              <Tooltip title="Create Todo">
+                <div
+                  onClick={() => dispatch(setFormVisible(true))}
+                  style={{ border: `1px dashed grey`, padding: 25, margin: 25 }}
+                >
+                  <PlusOutlined
+                    style={{
+                      fontSize: 100,
+                      color: "grey",
+                    }}
+                  />
+                </div>
+              </Tooltip>
+            </Card>
+          </Col>
+        ) : (
+          <Col span={6}>
+            <TodoForm />
+          </Col>
+        )}
         {todos.data.map((todo) => (
           <Col span={6} key={todo.id}>
             <Card
@@ -76,29 +99,6 @@ function App() {
             </Card>
           </Col>
         ))}
-        {!isCreateFormVisible ? (
-          <Col span={6}>
-            <Card style={{ textAlign: "center" }} className="cursor-pointer">
-              <Tooltip title="Create Todo">
-                <div
-                  onClick={() => dispatch(setFormVisible(true))}
-                  style={{ border: `1px dashed grey`, padding: 25, margin: 25 }}
-                >
-                  <PlusOutlined
-                    style={{
-                      fontSize: 100,
-                      color: "grey",
-                    }}
-                  />
-                </div>
-              </Tooltip>
-            </Card>
-          </Col>
-        ) : (
-          <Col span={6}>
-            <TodoForm />
-          </Col>
-        )}
       </Row>
     </div>
   );
