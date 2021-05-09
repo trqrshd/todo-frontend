@@ -9,6 +9,7 @@ const todoSlice = createSlice({
     form: { loading: false, visible: false },
   },
   reducers: {
+    //   fetch list actions
     fetchTodoListRequest: (state) => {
       state.todoList.loading = true;
     },
@@ -18,15 +19,34 @@ const todoSlice = createSlice({
     fetchTodoListError: (state) => {
       state.todoList.loading = false;
     },
+
+    // create actions
     createTodoRequest: (state) => {
       state.form.loading = true;
     },
-    createTodoSuccess: (state) => {
+    createTodoSuccess: (state, { payload }) => {
       state.form.loading = false;
+      state.todoList.data.push(payload);
     },
     createTodoError: (state) => {
       state.form.loading = false;
     },
+
+    // delete actions
+    deleteTodoRequest: (state, { payload: id }) => {
+      const index = state.todoList.data.findIndex((item) => item.id === id);
+      state.todoList.data[index].deleting = true;
+    },
+    deleteTodoSuccess: (state, { payload: id }) => {
+      const index = state.todoList.data.findIndex((item) => item.id === id);
+      state.todoList.data.splice(index, 1);
+    },
+    deleteTodoError: (state, { payload: id }) => {
+      const index = state.todoList.data.findIndex((item) => item.id === id);
+      state.todoList.data[index].deleting = false;
+    },
+
+    // others
     setFormVisible: (state, { payload }) => {
       state.form.visible = payload;
     },
@@ -42,6 +62,9 @@ export const {
   createTodoError,
   setFormValue,
   setFormVisible,
+  deleteTodoRequest,
+  deleteTodoError,
+  deleteTodoSuccess,
 } = todoSlice.actions;
 
 export default todoSlice;

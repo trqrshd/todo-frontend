@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Card, Input, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 

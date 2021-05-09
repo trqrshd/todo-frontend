@@ -3,9 +3,13 @@ import React, { useEffect } from "react";
 import { Button, Card, Row, Col, Tooltip, Divider } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-import { EditFilled, PlusOutlined } from "@ant-design/icons";
+import { EditFilled, PlusOutlined, DeleteFilled } from "@ant-design/icons";
 
-import { fetchTodoListRequest, setFormVisible } from "./containers/todo/slice";
+import {
+  fetchTodoListRequest,
+  setFormVisible,
+  deleteTodoRequest,
+} from "./containers/todo/slice";
 import TodoForm from "./containers/todo/TodoForm";
 
 import "./App.css";
@@ -33,9 +37,24 @@ function App() {
             <Card
               title={todo.title}
               extra={
-                <Button type="primary" size="small" icon={<EditFilled />}>
-                  Edit
-                </Button>
+                <>
+                  <Button
+                    disabled={todo.deleting}
+                    type="primary"
+                    size="small"
+                    style={{ marginRight: 5 }}
+                  >
+                    <EditFilled />
+                  </Button>
+                  <Button
+                    loading={todo.deleting}
+                    type="danger"
+                    size="small"
+                    onClick={() => dispatch(deleteTodoRequest(todo.id))}
+                  >
+                    <DeleteFilled />
+                  </Button>
+                </>
               }
             >
               <div className="todo-description">{todo.description}</div>

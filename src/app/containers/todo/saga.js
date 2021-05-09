@@ -9,6 +9,9 @@ import {
   createTodoSuccess,
   createTodoError,
   setFormVisible,
+  deleteTodoRequest,
+  deleteTodoError,
+  deleteTodoSuccess,
 } from "./slice";
 
 export function* fetchDataSaga() {
@@ -16,7 +19,11 @@ export function* fetchDataSaga() {
     const response = yield axios.get("todos");
     yield put(
       fetchTodoListSuccess(
-        response.data.map((item) => ({ ...item, editing: false }))
+        response.data.map((item) => ({
+          ...item,
+          editing: false,
+          deleting: false,
+        }))
       )
     );
   } catch (e) {
@@ -26,16 +33,25 @@ export function* fetchDataSaga() {
 
 function* createTodoSaga({ payload }) {
   try {
-    yield axios.post("todos", payload);
-    yield put(createTodoSuccess());
-    yield put(fetchTodoListRequest());
+    const response = yield axios.post("todos", payload);
+    yield put(createTodoSuccess(response.data));
     yield put(setFormVisible(false));
   } catch (e) {
     yield put(createTodoError());
   }
 }
 
+function* deleteTodoSaga({ payload: id }) {
+  try {
+    yield axios.delete(`todos/${id}`);
+    yield put(deleteTodoSuccess(id));
+  } catch (e) {
+    yield put(deleteTodoError(id));
+  }
+}
+
 export default function* rootSaga() {
   yield takeLatest(fetchTodoListRequest.type, fetchDataSaga);
   yield takeLatest(createTodoRequest.type, createTodoSaga);
+  yield takeLatest(deleteTodoRequest.type, deleteTodoSaga);
 }
