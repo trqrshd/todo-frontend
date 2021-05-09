@@ -1,60 +1,39 @@
-import React from "react";
-import { Button } from "antd";
+import React, { useEffect } from "react";
+import { Button, Card, Row, Col } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Counter } from "./features/counter/Counter";
-import logo from "./logo.svg";
+import { EditFilled } from "@ant-design/icons";
+
+import { sagaActions } from "./sagaActions";
 
 import "./App.css";
 
 function App() {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todo.todos);
+
+  useEffect(() => {
+    dispatch({ type: sagaActions.FETCH_DATA_SAGA });
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <Button type="primary">Button</Button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div>
+      <Row gutter={20}>
+        {todos.map((todo) => (
+          <Col span={6} key={todo.id}>
+            <Card
+              title={todo.title}
+              extra={
+                <Button type="primary" size="small" icon={<EditFilled />}>
+                  Edit
+                </Button>
+              }
+            >
+              {todo.description}
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </div>
   );
 }
