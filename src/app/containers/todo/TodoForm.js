@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
-import { setFormValue, createTodoRequest } from "./slice";
+import { createTodoRequest, setFormVisible } from "./slice";
 
 const { TextArea } = Input;
 
 function TodoForm() {
   const dispatch = useDispatch();
-  const formState = useSelector((state) => state.todo.form.data);
+  const createLoading = useSelector((state) => state.todo.form.loading);
 
   return (
     <div>
@@ -19,7 +19,6 @@ function TodoForm() {
         onFinish={(values) => {
           dispatch(createTodoRequest(values));
         }}
-        onFinishFailed={() => {}}
       >
         <Card
           style={{ position: "relative" }}
@@ -30,14 +29,7 @@ function TodoForm() {
               style={{ margin: 0, padding: 0 }}
               rules={[{ required: true, message: "Please write todo title!" }]}
             >
-              <Input
-                onChange={({ target: { value } }) =>
-                  dispatch(setFormValue({ key: "title", value }))
-                }
-                placeholder="Todo title"
-                size="small"
-                value={formState.title}
-              />
+              <Input placeholder="Todo title" size="small" />
             </Form.Item>
           }
         >
@@ -48,14 +40,7 @@ function TodoForm() {
               { required: true, message: "Please write todo description!" },
             ]}
           >
-            <TextArea
-              style={{ resize: "none" }}
-              rows={2}
-              value={formState.description}
-              onChange={({ target: { value } }) =>
-                dispatch(setFormValue({ key: "description", value }))
-              }
-            />
+            <TextArea style={{ resize: "none" }} rows={2} />
           </Form.Item>
 
           <div
@@ -66,11 +51,21 @@ function TodoForm() {
               right: 20,
             }}
           >
-            <Button type="default" size="small" style={{ marginRight: 5 }}>
+            <Button
+              onClick={() => dispatch(setFormVisible(false))}
+              type="default"
+              size="small"
+              style={{ marginRight: 5 }}
+            >
               <CloseOutlined /> Cancel
             </Button>
-            <Button htmlType="submit" type="primary" size="small">
-              <CheckOutlined /> Save
+            <Button
+              loading={createLoading}
+              htmlType="submit"
+              type="primary"
+              size="small"
+            >
+              <CheckOutlined /> Create
             </Button>
           </div>
         </Card>

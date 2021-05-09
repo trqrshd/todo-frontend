@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { EditFilled, PlusOutlined } from "@ant-design/icons";
 
-import { fetchTodoListRequest } from "./containers/todo/slice";
+import { fetchTodoListRequest, setFormVisible } from "./containers/todo/slice";
 import TodoForm from "./containers/todo/TodoForm";
 
 import "./App.css";
@@ -19,6 +19,7 @@ const { Meta } = Card;
 function App() {
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todo.todoList);
+  const isCreateFormVisible = useSelector((state) => state.todo.form.visible);
 
   useEffect(() => {
     dispatch(fetchTodoListRequest());
@@ -56,25 +57,29 @@ function App() {
             </Card>
           </Col>
         ))}
-        <Col span={6}>
-          <Card style={{ textAlign: "center" }} className="cursor-pointer">
-            <Tooltip title="Create Todo">
-              <div
-                style={{ border: `1px dashed grey`, padding: 25, margin: 25 }}
-              >
-                <PlusOutlined
-                  style={{
-                    fontSize: 100,
-                    color: "grey",
-                  }}
-                />
-              </div>
-            </Tooltip>
-          </Card>
-        </Col>
-        <Col span={6}>
-          <TodoForm />
-        </Col>
+        {!isCreateFormVisible ? (
+          <Col span={6}>
+            <Card style={{ textAlign: "center" }} className="cursor-pointer">
+              <Tooltip title="Create Todo">
+                <div
+                  onClick={() => dispatch(setFormVisible(true))}
+                  style={{ border: `1px dashed grey`, padding: 25, margin: 25 }}
+                >
+                  <PlusOutlined
+                    style={{
+                      fontSize: 100,
+                      color: "grey",
+                    }}
+                  />
+                </div>
+              </Tooltip>
+            </Card>
+          </Col>
+        ) : (
+          <Col span={6}>
+            <TodoForm />
+          </Col>
+        )}
       </Row>
     </div>
   );

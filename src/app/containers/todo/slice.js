@@ -6,7 +6,7 @@ const todoSlice = createSlice({
   name: "todo",
   initialState: {
     todoList: { data: [], loading: false },
-    form: { data: { title: "", description: "" }, loading: false },
+    form: { loading: false, visible: false },
   },
   reducers: {
     fetchTodoListRequest: (state) => {
@@ -27,8 +27,8 @@ const todoSlice = createSlice({
     createTodoError: (state) => {
       state.form.loading = false;
     },
-    setFormValue: (state, action) => {
-      state.form.data[action.payload.key] = action.payload.value;
+    setFormVisible: (state, { payload }) => {
+      state.form.visible = payload;
     },
   },
 });
@@ -41,6 +41,7 @@ export const {
   createTodoSuccess,
   createTodoError,
   setFormValue,
+  setFormVisible,
 } = todoSlice.actions;
 
 export default todoSlice;

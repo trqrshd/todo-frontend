@@ -8,6 +8,7 @@ import {
   createTodoRequest,
   createTodoSuccess,
   createTodoError,
+  setFormVisible,
 } from "./slice";
 
 export function* fetchDataSaga() {
@@ -28,6 +29,7 @@ function* createTodoSaga({ payload }) {
     yield axios.post("todos", payload);
     yield put(createTodoSuccess());
     yield put(fetchTodoListRequest());
+    yield put(setFormVisible(false));
   } catch (e) {
     yield put(createTodoError());
   }
