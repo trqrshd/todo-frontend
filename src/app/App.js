@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import React, { useEffect } from "react";
-import { Button, Card, Row, Col, Tooltip, Divider } from "antd";
+import { Button, Card, Row, Col, Tooltip, Divider, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
 import { EditFilled, PlusOutlined, DeleteFilled } from "@ant-design/icons";
@@ -9,6 +9,7 @@ import {
   fetchTodoListRequest,
   setFormVisible,
   deleteTodoRequest,
+  createTodoRequest,
 } from "./containers/todo/slice";
 import TodoForm from "./containers/todo/TodoForm";
 
@@ -23,11 +24,20 @@ const { Meta } = Card;
 function App() {
   const dispatch = useDispatch();
   const todos = useSelector((state) => state.todo.todoList);
-  const isCreateFormVisible = useSelector((state) => state.todo.form.visible);
+  const { visible: isCreateFormVisible, loading: createLoading } = useSelector(
+    (state) => state.todo.form
+  );
 
   useEffect(() => {
     dispatch(fetchTodoListRequest());
   }, [dispatch]);
+
+  if (todos.loading)
+    return (
+      <div style={{ margin: "0 50px 50px 0" }}>
+        <Spin spinning />
+      </div>
+    );
 
   return (
     <div style={{ margin: 50 }}>
@@ -52,7 +62,11 @@ function App() {
           </Col>
         ) : (
           <Col span={6}>
-            <TodoForm />
+            <TodoForm
+              submitting={createLoading}
+              onSubmit={(values) => dispatch(createTodoRequest(values))}
+              onCancel={() => dispatch(setFormVisible(false))}
+            />
           </Col>
         )}
         {todos.data.map((todo) => (
@@ -73,7 +87,7 @@ function App() {
                     loading={todo.deleting}
                     type="danger"
                     size="small"
-                    onClick={() => dispatch(deleteTodoRequest(todo.id))}
+                    onClick={() => dispatch(deleteTodoRequest(todo))}
                   >
                     <DeleteFilled />
                   </Button>

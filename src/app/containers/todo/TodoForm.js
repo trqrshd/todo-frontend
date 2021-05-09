@@ -1,23 +1,17 @@
 import React from "react";
 import { Button, Card, Input, Form } from "antd";
-import { useDispatch, useSelector } from "react-redux";
 
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
-import { createTodoRequest, setFormVisible } from "./slice";
-
 const { TextArea } = Input;
 
-function TodoForm() {
-  const dispatch = useDispatch();
-  const createLoading = useSelector((state) => state.todo.form.loading);
-
+function TodoForm({ onSubmit, onCancel, submitting, id }) {
   return (
     <div>
       <Form
         name="basic"
         onFinish={(values) => {
-          dispatch(createTodoRequest(values));
+          onSubmit(values);
         }}
       >
         <Card
@@ -52,7 +46,8 @@ function TodoForm() {
             }}
           >
             <Button
-              onClick={() => dispatch(setFormVisible(false))}
+              disabled={submitting}
+              onClick={onCancel}
               type="default"
               size="small"
               style={{ marginRight: 5 }}
@@ -60,12 +55,12 @@ function TodoForm() {
               <CloseOutlined /> Cancel
             </Button>
             <Button
-              loading={createLoading}
+              loading={submitting}
               htmlType="submit"
               type="primary"
               size="small"
             >
-              <CheckOutlined /> Create
+              <CheckOutlined /> {id ? "Save" : "Create"}
             </Button>
           </div>
         </Card>

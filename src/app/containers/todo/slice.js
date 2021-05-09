@@ -15,6 +15,7 @@ const todoSlice = createSlice({
     },
     fetchTodoListSuccess: (state, action) => {
       state.todoList.data = action.payload;
+      state.todoList.loading = false;
     },
     fetchTodoListError: (state) => {
       state.todoList.loading = false;
@@ -33,7 +34,7 @@ const todoSlice = createSlice({
     },
 
     // delete actions
-    deleteTodoRequest: (state, { payload: id }) => {
+    deleteTodoRequest: (state, { payload: { id } }) => {
       const index = state.todoList.data.findIndex((item) => item.id === id);
       state.todoList.data[index].deleting = true;
     },
