@@ -8,23 +8,35 @@ import {
 import saga from "../saga";
 
 let sagaMiddleware = createSagaMiddleware();
-const middleware = [...getDefaultMiddleware({ thunk: false }), sagaMiddleware];
+const middleware = [
+  ...getDefaultMiddleware({ thunk: false, serializableCheck: false }),
+  sagaMiddleware,
+];
 
 const todoSlice = createSlice({
   name: "todo",
   initialState: {
     todos: [],
+    form: { title: "", description: "" },
   },
   reducers: {
     fetchData: (state, action) => {
-      return {
-        todos: action.payload,
-      };
+      state.todos = action.payload;
+      // no need to manage immuteability
+      // redux-toolkit handles it by default
+      // return {
+      //   ...state,
+      //   todos: action.payload,
+      // };
+    },
+
+    setFormValue: (state, action) => {
+      state.form[action.payload.key] = action.payload.value;
     },
   },
 });
 
-export const { fetchData } = todoSlice.actions;
+export const { fetchData, setFormValue } = todoSlice.actions;
 
 const store = configureStore({
   reducer: {

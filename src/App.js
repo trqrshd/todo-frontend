@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { EditFilled, PlusOutlined } from "@ant-design/icons";
 
 import { sagaActions } from "./sagaActions";
+import TodoForm from "./TodoForm";
 
 import "./App.css";
 
@@ -46,7 +47,7 @@ function App() {
           </Col>
         ))}
         <Col span={6}>
-          <Card style={{ textAlign: "center" }}>
+          <Card style={{ textAlign: "center" }} className="cursor-pointer">
             <PlusOutlined
               style={{
                 fontSize: 70,
@@ -58,6 +59,9 @@ function App() {
 
             <Meta description="Create Todo" />
           </Card>
+        </Col>
+        <Col span={6}>
+          <TodoForm />
         </Col>
       </Row>
     </div>

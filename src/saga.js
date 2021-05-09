@@ -6,6 +6,17 @@ import { sagaActions } from "./sagaActions";
 export function* fetchDataSaga() {
   try {
     const response = yield axios.get("todos");
+    yield put(
+      fetchData(response.data.map((item) => ({ ...item, editing: false })))
+    );
+  } catch (e) {
+    yield put({ type: "TODO_FETCH_FAILED" });
+  }
+}
+
+function* createTodoSaga() {
+  try {
+    const response = yield axios.get("todos");
     yield put(fetchData(response.data));
   } catch (e) {
     yield put({ type: "TODO_FETCH_FAILED" });
@@ -14,4 +25,5 @@ export function* fetchDataSaga() {
 
 export default function* rootSaga() {
   yield takeEvery(sagaActions.FETCH_DATA_SAGA, fetchDataSaga);
+  yield takeEvery(sagaActions.FETCH_DATA_SAGA, createTodoSaga);
 }
