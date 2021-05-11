@@ -1,8 +1,8 @@
 import createSagaMiddleware from "redux-saga";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 
-import saga from "./containers/todo/saga";
-import todoSlice from "./containers/todo/slice";
+import saga from "./components/saga";
+import todoSlice from "./components/slice";
 
 let sagaMiddleware = createSagaMiddleware();
 const middleware = [

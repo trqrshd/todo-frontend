@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Button, Card, Input, Form } from "antd";
-
 import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
+
+import CardCol from "./CardCol";
 
 const { TextArea } = Input;
 
@@ -11,7 +12,7 @@ function TodoForm({ onSubmit, onCancel, submitting, id, initialValues }) {
   );
 
   return (
-    <div>
+    <CardCol>
       <Form
         initialValues={initialValues || {}}
         name="basic"
@@ -103,7 +104,7 @@ function TodoForm({ onSubmit, onCancel, submitting, id, initialValues }) {
           </div>
         </Card>
       </Form>
-    </div>
+    </CardCol>
   );
 }
 

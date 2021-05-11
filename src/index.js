@@ -1,11 +1,13 @@
 import React from "react";
+import axios from "axios";
 import ReactDOM from "react-dom";
-import "./index.css";
+import { Provider } from "react-redux";
+
 import App from "./app/App";
 import store from "./app/store";
-import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
-import axios from "axios";
+
+import "./index.css";
 
 axios.defaults.baseURL = "http://0.0.0.0:3000/api/";
 
