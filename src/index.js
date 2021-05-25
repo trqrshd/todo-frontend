@@ -9,7 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 
 import "./index.css";
 
-axios.defaults.baseURL = "http://0.0.0.0:3000/api/";
+axios.defaults.baseURL = "http://0.0.0.0:3000/";
 
 ReactDOM.render(
   <React.StrictMode>
